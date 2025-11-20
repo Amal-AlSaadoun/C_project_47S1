@@ -98,5 +98,3 @@ void updateRoomStatus(struct Room* Rooms, int roomCount, int id, char ch) {
     else
         UpdatedRoom->status = ch;
 } // End updateRoomStatus
-
-// this is an alteration to this file
