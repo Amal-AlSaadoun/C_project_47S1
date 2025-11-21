@@ -100,7 +100,7 @@ Booking* createBooking(Booking *head, Room *rooms, int accountID, int roomID, in
 //==========================================
 Booking* cancelBooking(Booking *head, int bookingID, Room *rooms) {
     
- Booking *p = head , q=NULL;
+ Booking *p = head , *q=NULL;
   
 // Search for booking
   while (p != NULL && p->bookingID != bookingID) {
