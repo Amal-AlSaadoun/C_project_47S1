@@ -6,7 +6,7 @@
 //============================
 Room* loadRooms(const char *filename){
 
-FILE *fpi =(filename , "r");
+FILE *fpi =fopen(filename , "r");
 
 if (fpi== NULL) {
         printf("Can't open rooms file.\n");
