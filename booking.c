@@ -3,14 +3,101 @@
 #include <string.h>
 #include "booking.h"
 #include "room.c"
+//==========================================
+Booking* loadBookings(const char *filename){
+   //-------------
+   //open the file
+   FILE *fp=fopen(filename,"r");
+   //check
+   if (fp == NULL) {
+      printf("Sorry, Can't open Booking file\n");
+      return NULL;}
+   //-------------
+   Booking *head = NULL;
+   Booking *current;
+   int bID, rID, aID, nights;
+   float cost;
+   //read line by line using fscanf
+   while (fscanf(fp, "%d %d %d %d %f", &bID, &rID, &aID, &nights, &cost) == 5) {
+      Booking *newB = (Booking*) malloc(sizeof(Booking));
+      newB->bookingID = bID;
+      newB->roomID = rID;
+      newB->accountID = aID;
+      newB->nights = nights;
+      newB->totalCost = cost;
+      newB->next = NULL;
+      //first node
+      if (head == NULL) {
+         head = current= newB;
+        }
+      else {
+         current->next = newB;
+         current= newB;}
+   }//while
+   //close file
+   fclose(fp);
+   return head;
+}//end
+//==========================================
+void saveBookings(Booking *head, const char *filename){
+   FILE *fp=fopen(filename,"w");
+   //check
+   if (fp == NULL) {
+      printf("Sorry, Can't save the file\n");
+      return;}
+   
+   Booking *curr = head;
+   while (curr) {
+      fprintf(fp, "%d %d %d %d %.2f\n", curr->bookingID, curr->roomID, curr->accountID, curr->nights, curr->totalCost);
+      curr = curr->next;}
+   //close the file
+   fclose(fp);
+}//end save
+//==========================================
+Booking* createBooking(Booking *head, Room *rooms, int accountID, int roomID, int nights){
+   Room *room=findRoom(rooms,roomID);
+   if(room==NULL){
+      printf("Room not found");
+      return head;}
+   
+   if(room->status !='A'){
+      printf("room is not available");
+      return head;}
+      
+   if(nights<0){
+      printf("invalid number of nights");
+      return head;}
 
+   Booking *curr = head;
+   Booking *last = NULL;
+   int count=0;
+   //count + track last node
+   while (curr != NULL) {
+      count++;            //count existing bookings
+      last = curr;        //update last node
+      curr = curr->next;  //move forward
+   }
+   int newID=count+1;
 
-/*Booking* loadBookings(const char *filename);
+   //create new booking node
+   Booking *newB = (Booking*) malloc(sizeof(Booking));
+   newB->bookingID = newID;
+   newB->roomID = roomID;
+   newB->accountID = accountID;
+   newB->nights = nights;
+   newB->totalCost = calculateTotalCost(room->price, nights);
+   newB->next = NULL;
+   updateRoomStatus(rooms, roomID,'O');
 
-void saveBookings(Booking *head, const char *filename); 
-Booking* createBooking(Booking *head, Room *rooms, int accountID, int roomID, 
-int nights);*/
+    //if list is empty
+   if (head == NULL){
+      return newB;
+   }
+   last->next = newB;
 
+   return head;
+}
+//==========================================
 Booking* cancelBooking(Booking *head, int bookingID, Room *rooms) {
     
  Booking *p = head , q=NULL;
