@@ -4,22 +4,29 @@
 #define _ROOM_H
 //============================
 //Room structure definition
-struct Room{
-   int roomID;
-   enum RoomType{STANDARD ,DELUXE ,SUITE } roomType;
-   int capacity;
-   float price;
-   char status;
-   char amenities[3][20];
-   int amenitiesCount;
-};
-//============================
+typedef enum {
+STANDARD,
+DELUXE,
+SUITE
+} RoomType;
+
+typedef struct Room {
+int roomID;
+RoomType type;
+int capacity;
+float price;
+char status; char amenities[5][20];
+int amenityCount;
+struct Room *next; } Room;
+//=========================
 //Function Prototypes
-void initRooms( struct Room* Rooms);
-void printRooms( struct Room* Rooms, int roomCount);
-struct Room* searchRoomByID( struct Room* Rooms, int roomCount, int id);
-void searchRoomByType (struct Room* Rooms , int roomCount, enum RoomType room_T);
-void updateRoomStatus( struct Room* Rooms , int roomCount, int id , char ch);
+Room* loadRooms(const char *filename);
+void saveRooms(Room *head, const char *filename);
+void printRooms(Room *head);
+Room* findRoom(Room *head, int roomID);
+void updateRoomStatus(Room *head, int roomID, char newStatus);
+void addRoom(Room **head, Room newRoom);
+void freeRooms(Room *head);
 //============================
 #endif
 

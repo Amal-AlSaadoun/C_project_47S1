@@ -1,100 +1,164 @@
 //============================
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "room.h"
 //============================
-//Initializes the hotel rooms with predefined data
-void initRooms(struct Room* Rooms){ 
-   // Room 1
-   Rooms[0].roomID = 101;
-   Rooms[0].roomType = STANDARD;
-   Rooms[0].capacity = 2;
-   Rooms[0].price = 100.00;
-   Rooms[0].status = 'A';
-   strcpy(Rooms[0].amenities[0], "WiFi");
-   strcpy(Rooms[0].amenities[1], "TV");
-   Rooms[0].amenitiesCount = 2;
-   //---------------------
-   // Room 2
-   Rooms[1].roomID = 201;
-   Rooms[1].roomType = DELUXE;
-   Rooms[1].capacity = 3;
-   Rooms[1].price = 200.00;
-   Rooms[1].status = 'A';
-   strcpy(Rooms[1].amenities[0], "WiFi");
-   strcpy(Rooms[1].amenities[1], "MiniBar");
-   Rooms[1].amenitiesCount = 2;
-   //---------------------
-   // Room 3
-   Rooms[2].roomID = 301;
-   Rooms[2].roomType = SUITE;
-   Rooms[2].capacity = 4;
-   Rooms[2].price = 300.00;
-   Rooms[2].status = 'A';
-   strcpy(Rooms[2].amenities[0], "WiFi");
-   strcpy(Rooms[2].amenities[1], "MiniBar");
-   strcpy(Rooms[2].amenities[2], "Jacuzzi");
-   Rooms[2].amenitiesCount = 3;
-} // End initRooms function
-//============================
-//Displays all room records in a clear, tabular format.
-void printRooms(struct Room* Rooms ,int roomCount) {
-   printf("\n%-5s  %-9s  %-5s  %-10s  %-8s %-s \n", "ID", "Type", "Cap", "Price", "Status", "Amenities");
+Room* loadRooms(const char *filename){
 
-   for (int i = 0; i < roomCount; i++) {
-    
-      // Determine the type 
-      if (Rooms[i].roomType == STANDARD)
-         printf("%-5d  %-9s  %-5d  %-9.2f   %-8c ", Rooms[i].roomID, "STANDARD", Rooms[i].capacity, Rooms[i].price, Rooms[i].status);
-      else if (Rooms[i].roomType == DELUXE)
-         printf("%-5d  %-9s  %-5d  %-9.2f   %-8c ", Rooms[i].roomID, "DELUXE", Rooms[i].capacity, Rooms[i].price, Rooms[i].status);
-      else if (Rooms[i].roomType == SUITE)
-         printf("%-5d  %-9s  %-5d  %-9.2f   %-8c ", Rooms[i].roomID, "SUITE",  Rooms[i].capacity, Rooms[i].price, Rooms[i].status);
+FILE *fpi =(filename , "r");
 
-      for (int j = 0; j < Rooms[i].amenitiesCount; j++)
-         printf("%s, ", Rooms[i].amenities[j]);
-      printf("\n");
-    }//end of for loop
-} // End printRooms function
+if (fpi== NULL) {
+        printf("Can't open rooms file.\n");
+        return NULL; }
+
+        Room *head = NULL;
+
+    int RoomTypenum;
+    Room NewRoom ;
+    while (fscanf(fpi, "%d %d %d %f %c %d", 
+                  &NewRoom.roomID, &RoomTypenum, &NewRoom.capacity, 
+                  &NewRoom.price, &NewRoom.status, &NewRoom.amenityCount) == 6) { //6 is the number of 
+          //determine room type  
+         switch(RoomTypenum){
+         case 0 : NewRoom.type = STANDARD; 
+         break; 
+         case 1 : NewRoom.type = DELUXE; 
+         break; 
+         case 2 : NewRoom.type = SUITE;
+         break; 
+         }
+         // Read new room amenities
+        for (int i = 0; i < NewRoom.amenityCount; i++) 
+         fscanf(fpi, " %[^\n]", NewRoom.amenities[i]);//read 1 line
+      
+        NewRoom.next = NULL;
+        addRoom(&head, NewRoom);
+
+      }//End while - End loadin data
+
+    fclose(fpi);
+    return head;
+}//End loadRooms comment
 //============================
-//Returns a pointer to the room with the given ID, or NULL if not found
-struct Room* searchRoomByID(struct Room* Rooms, int roomCount, int id) {
-   for (int i = 0; i < roomCount; i++) {
-      if (Rooms[i].roomID == id)
-         return &Rooms[i];
+
+
+void saveRooms(Room *head, const char *filename){
+ 
+   FILE *fpo = fopen(filename, "w");
+    if (fpo == NULL) {
+        printf("Can't save rooms in the file!\n");
+        return;
     }
-   return NULL;//if room not found
-} // End searchRoomByID function
-//============================
-//Prints all rooms that match the given type
-void searchRoomByType(struct Room* Rooms, int roomCount, enum RoomType room_T) {
+    Room *current = head; //start frome head
 
-   printf("\n%-5s  %-9s  %-5s  %-10s  %-8s %-s \n", "ID", "Type", "Cap", "Price", "Status", "Amenities");
+   while (current != NULL) {
+         fprintf(fpo, "%d %d %d %.2f %c %d\n", 
+                  current->roomID, current->type, current->capacity, 
+                  current->price, current->status, current->amenityCount);
+   // current amenities
+        for (int i = 0; i < current->amenityCount; i++) 
+            fprintf(fpo, "%s\n", current->amenities[i]);
+        
+        current = current->next; //move current to the next node
+    }//End while
+    
+    fclose(fpo);
+}//End saveRooms
+
+
+//============================
+void printRooms(Room *head){ 
    
+   printf("\n%-5s  %-9s  %-5s  %-10s  %-8s %-s \n", "ID", "Type", "Cap", "Price", "Status", "Amenities");
 
-   for (int i = 0; i < roomCount; i++) {
-      if (Rooms[i].roomType == room_T) {
-         // Determine the type 
-         if (Rooms[i].roomType == STANDARD)
-            printf("%-5d  %-9s  %-5d  %-9.2f   %-8c ", Rooms[i].roomID,"STANDARD", Rooms[i].capacity, Rooms[i].price, Rooms[i].status);
-         else if (Rooms[i].roomType == DELUXE)
-            printf("%-5d  %-9s  %-5d  %-9.2f   %-8c ", Rooms[i].roomID,"DELUXE", Rooms[i].capacity, Rooms[i].price, Rooms[i].status);
-         else if (Rooms[i].roomType == SUITE)
-            printf("%-5d  %-9s  %-5d  %-9.2f   %-8c ", Rooms[i].roomID, "SUITE", Rooms[i].capacity, Rooms[i].price, Rooms[i].status);
+   Room *current = head; //start frome head
 
-         for (int j = 0; j < Rooms[i].amenitiesCount; j++)
-            printf("%s, ", Rooms[i].amenities[j]);
-         printf("\n");
-        }//if
-    }//for
-} // End searchRoomByType function
+   while (current != NULL) {
+
+   if (current->type == STANDARD)
+            printf("%-5d  %-9s  %-5d  %-9.2f   %-8c ", current->roomID, "STANDARD", current->capacity, current->price, current->status);
+         
+            else if (current->type== DELUXE)
+            printf("%-5d  %-9s  %-5d  %-9.2f   %-8c ", current->roomID, "DELUXE", current->capacity, current->price, current->status);
+        
+            else if (current->type == SUITE)
+            printf("%-5d  %-9s  %-5d  %-9.2f   %-8c ", current->roomID, "SUITE", current->capacity, current->price, current->status);
+
+
+         for (int j = 0; j < current->amenityCount; j++)
+            printf("%s, ", current->amenities[j]);
+
+            printf("\n");
+            current=current->next; //move current to the next node
+   }//End while
+} // End printRooms function
+
 //============================
-//Updates a room's status (A or O) when a booking is created or canceled
-void updateRoomStatus(struct Room* Rooms, int roomCount, int id, char ch) {
-    struct Room* UpdatedRoom = searchRoomByID(Rooms, roomCount, id);
+Room* findRoom(Room *head, int roomID){
 
-    if (UpdatedRoom == NULL)
+   Room *current = head; //start frome head
+
+   while (current != NULL) {
+      if (current->roomID == roomID)
+         return current;
+            
+      current=current->next; //move current to the next node   
+   }//End while
+
+   return NULL;//if room not found
+
+}//End findRoom 
+
+
+//============================
+
+void updateRoomStatus(Room *head, int roomID, char newStatus){
+
+   Room *current = searchRoomByID(head, roomID);
+
+   if (current == NULL)
         printf("Room NOT found: wrong room ID\n");
-    else
-        UpdatedRoom->status = ch;
-} // End updateRoomStatus
+   else
+        current->status = newStatus;
+
+}//End updateRoomStatus
+
+//============================
+void addRoom(Room **head, Room newRoom){
+
+   Room *tmp = (Room*)calloc(1,sizeof(Room));
+   if(tmp==NULL){
+      printf("Can't allocate memory for new room !\n");
+      return;
+   }
+   *tmp=newRoom;
+   tmp->next=NULL;
+
+   if(*head==NULL){//empty list
+      *head=tmp;
+   } else {
+
+   Room *current = *head;//start frome head
+        while (current->next != NULL) 
+            current = current->next;//move current to the last node   
+   
+        current->next = tmp;//add at the end
+   }
+
+   }//End addRoom
+
+
+
+
+//============================
+void freeRooms(Room *head){
+
+   while (head != NULL) {
+     Room *tmp = head;
+     head = head->next;
+     free(tmp);  //free each node individually (should use method saveRooms before, to not lose Rooms data)
+   }
+}//End freeRooms
+
+
