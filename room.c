@@ -115,7 +115,7 @@ Room* findRoom(Room *head, int roomID){
 
 void updateRoomStatus(Room *head, int roomID, char newStatus){
 
-   Room *current = searchRoomByID(head, roomID);
+   Room *current = findRoom(head, roomID);
 
    if (current == NULL)
         printf("Room NOT found: wrong room ID\n");
