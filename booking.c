@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "booking.h"
-#include "room.c"
+#include "room.h"
 //==========================================
 Booking* loadBookings(const char *filename){
    //-------------
@@ -64,7 +64,7 @@ Booking* createBooking(Booking *head, Room *rooms, int accountID, int roomID, in
       printf("room is not available");
       return head;}
       
-   if(nights<0){
+   if(nights<=0){
       printf("invalid number of nights");
       return head;}
 
@@ -89,12 +89,10 @@ Booking* createBooking(Booking *head, Room *rooms, int accountID, int roomID, in
    newB->next = NULL;
    updateRoomStatus(rooms, roomID,'O');
 
-    //if list is empty
+   //if list is empty
    if (head == NULL){
-      return newB;
-   }
+      return newB;}
    last->next = newB;
-
    return head;
 }
 //==========================================
@@ -102,7 +100,7 @@ Booking* cancelBooking(Booking *head, int bookingID, Room *rooms) {
     
  Booking *p = head , *q=NULL;
   
-// Search for booking
+//search for booking
   while (p != NULL && p->bookingID != bookingID) {
         q = p;
         p = p->next; }
@@ -111,10 +109,10 @@ Booking* cancelBooking(Booking *head, int bookingID, Room *rooms) {
         printf("Booking not found!\n");
         return head; }
 
-// Update room status
+//update room status
   updateRoomStatus(rooms, p->roomID, 'A');
 
-// delete the node
+//delete the node
     if (q == NULL) { head = p->next;}
      else {q->next = p->next; }
 
