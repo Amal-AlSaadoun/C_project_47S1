@@ -21,9 +21,5 @@ Account* login (Account *head, char *username, char *password);
 void encryptPassword(char *password);
 void decryptPassword(char *password); 
 void freeAccounts(Account *head);
-/*
-int registerAccount(struct Account accounts[], int *totalAccounts, int capacity);
-int login(struct Account accounts[], int totalAccounts, char *username, char *password);
-*/
 //============================
 #endif 
