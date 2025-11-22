@@ -116,3 +116,12 @@ void decryptPassword(char *password) {
     for(int i = 0; password[i] != '\0'; i++)
         password[i] -= 3; //Caesar -3
 }
+//==========================================
+//free account
+void freeAccounts(Account *head){
+   while (head != NULL) {
+      Account *temp = head;
+      head = head->next;
+      free (temp) ;
+   }
+}
