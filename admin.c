@@ -68,7 +68,11 @@ void addNewRoom(Room **rooms) {
 
     printf("Enter Room ID: ");
     scanf("%d", &newRoom.roomID);
-
+    //prevent duplicate IDs
+    if(findRoom(*rooms, newRoom.roomID) != NULL) {
+        printf("Room ID already exists! Please choose another ID.\n");
+        return;}
+     
     printf("Enter Room Type (0=STANDARD, 1=DELUXE, 2=SUITE): ");
     scanf("%d", &roomType);
     newRoom.type = (RoomType)roomType;
