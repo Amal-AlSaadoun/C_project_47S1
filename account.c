@@ -99,8 +99,10 @@ Account* registerAccount(Account *head, char *username, int age, char *password)
 Account* login (Account *head, char *username, char *password){
    Account *curr = head;
    while(curr != NULL) {
-      if(strcmp(curr->username, username) == 0 && strcmp(curr->password, password) == 0) 
-         return curr;//login successful
+        if(strcmp(curr->username, username) == 0 && strcmp(curr->password, password) == 0) 
+         {  printf("Account login successfully\n");
+            return curr;//login successful 
+            }
       curr = curr->next;
     }
     return NULL;//not found
