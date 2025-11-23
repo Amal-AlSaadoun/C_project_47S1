@@ -77,7 +77,7 @@ Booking* createBooking(Booking *head, Room *rooms, int accountID, int roomID, in
       last = curr;        //update last node
       curr = curr->next;  //move forward
    }
-   int newID=count+1;
+   int newID=last->bookingID+1;
 
    //create new booking node
    Booking *newB = (Booking*) malloc(sizeof(Booking));
@@ -88,6 +88,7 @@ Booking* createBooking(Booking *head, Room *rooms, int accountID, int roomID, in
    newB->totalCost = calculateTotalCost(room->price, nights);
    newB->next = NULL;
    updateRoomStatus(rooms, roomID,'O');
+   printf("Booking created successfully\n");
 
    //if list is empty
    if (head == NULL){
@@ -101,7 +102,7 @@ Booking* cancelBooking(Booking *head, int bookingID, Room *rooms) {
  Booking *p = head , *q=NULL;
   
 //search for booking
-  while (p != NULL && p->bookingID != bookingID) {
+  while (p != NULL && p->bookingID != bookingID ) {
         q = p;
         p = p->next; }
 
@@ -109,10 +110,10 @@ Booking* cancelBooking(Booking *head, int bookingID, Room *rooms) {
         printf("Booking not found!\n");
         return head; }
 
-//update room status
-  updateRoomStatus(rooms, p->roomID, 'A');
+    //update room status
+    updateRoomStatus(rooms, p->roomID, 'A');
 
-//delete the node
+    //delete the node
     if (q == NULL) { head = p->next;}
      else {q->next = p->next; }
 
