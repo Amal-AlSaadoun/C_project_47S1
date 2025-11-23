@@ -83,7 +83,27 @@ int main() {
                      int cancelID;
                      printf("Enter Booking ID to cancel: ");
                      scanf("%d", &cancelID);
-                     bookList = cancelBooking(bookList, cancelID, roomList); }
+                     // verify booking belongs to this user BEFORE cancellation
+                    Booking *temp = bookList;
+                    int allowed = 0;
+                    while (temp != NULL) {
+                        if (temp->bookingID == cancelID) {
+                            if (temp->accountID == loggedIn->accountID) {
+                                allowed = 1;
+                            }
+                            break; //stop searching
+                        }
+                        temp = temp->next;
+                    }
+                    
+                    if (!allowed) {
+                        printf("You cannot cancel this booking! It does not belong to your account\n");
+                    } else {
+                        bookList = cancelBooking(bookList, cancelID, roomList);
+                    }
+                     
+                     
+                      }
                   //View My Bookings
                   else if (userOption == 4) {printUserBookings(bookList, loggedIn->accountID);}
                   //Logout
