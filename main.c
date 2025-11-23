@@ -145,17 +145,15 @@ int main() {
 
 //====================================================================
 void showAvailableOnly(Room *allRooms) {
-
- printf("Rooms Currently Available:\n");
- printf("RoomID   Type       Capacity   Price     Amenities\n");
- 
  Room *p = allRooms;
  int found = 0;
  while (p != NULL) {
    if (p->status == 'A') {
      found = 1;
-     char type[20];
-     
+      printf("Rooms Currently Available:\n");
+      printf("RoomID   Type       Capacity   Price     Amenities\n");
+      
+      char type[20];
       if (p->type == STANDARD) strcpy(type, "Standard");
       else if (p->type == DELUXE) strcpy(type, "Deluxe");
       else strcpy(type, "Suite");
