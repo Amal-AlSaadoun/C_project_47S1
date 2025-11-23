@@ -147,7 +147,7 @@ int main() {
 void showAvailableOnly(Room *allRooms) {
 
  printf("Rooms Currently Available:\n");
- printf("RoomID   Type        Capacity   Price     Amenities\n");
+ printf("RoomID   Type       Capacity   Price     Amenities\n");
  
  Room *p = allRooms;
  int found = 0;
