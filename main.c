@@ -32,10 +32,23 @@ int main() {
       if(option == 1) {
          printf("Enter your username: ");
          scanf(" %[^\n]", name);
+         // keep asking if username too long
+         while (strlen(name) > 20) {
+            printf("Username is too long! (max 20 characters)\n");
+            printf("Enter a shorter username: ");
+            scanf(" %[^\n]", name);
+         }
          printf("Enter your age: ");
          scanf("%d", &userAge);
+         
          printf("Create password: ");
-         scanf("%s", password);
+         scanf("%s", password); 
+         //check password length
+         while (strlen(password) > 20) {
+            printf("Password is too long! Maximum length is 20 characters.\n");
+            printf("Enter a shorter password: ");
+            scanf("%s", password);
+        }
          userList = registerAccount(userList, name, userAge, password);  }
 
    //===============================================================
@@ -86,6 +99,7 @@ int main() {
                      // verify booking belongs to this user BEFORE cancellation
                     Booking *temp = bookList;
                     int allowed = 0;
+                    
                     while (temp != NULL) {
                         if (temp->bookingID == cancelID) {
                             if (temp->accountID == loggedIn->accountID) {
