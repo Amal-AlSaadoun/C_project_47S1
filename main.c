@@ -147,31 +147,30 @@ int main() {
 void showAvailableOnly(Room *allRooms) {
 
  printf("Rooms Currently Available:\n");
- printf("--------------------------------------------\n");
-
+ printf("RoomID   Type        Capacity   Price     Amenities\n");
+ 
  Room *p = allRooms;
- int found = 0; 
-  while (p != NULL) {
+ int found = 0;
+ while (p != NULL) {
    if (p->status == 'A') {
-     found = 1;   
+     found = 1;
      char type[20];
-     if (p->type == STANDARD) strcpy(type, "Standard");
-     else if (p->type == DELUXE) strcpy(type, "Deluxe");
-     else strcpy(type, "Suite");
+     
+      if (p->type == STANDARD) strcpy(type, "Standard");
+      else if (p->type == DELUXE) strcpy(type, "Deluxe");
+      else strcpy(type, "Suite");
 
-      printf("\nRoom ID       : %d\n", p->roomID);
-      printf("Room Type     : %s\n", type);
-      printf("Capacity      : %d guests\n", p->capacity);
-      printf("Price per night: %.2f SAR\n", p->price);
+    printf("%-8d %-10s %-10d %-9.2f ",p->roomID,type,p->capacity,p->price);
 
-      printf("Amenities : ");
-      for (int i = 0; i < p->amenityCount; i++) {
+    for (int i = 0; i < p->amenityCount; i++) {
        printf("%s", p->amenities[i]);
        if (i < p->amenityCount - 1) printf(", "); }
+          printf("\n");
+        }
+        p = p->next;
+    }
 
-    printf("\n--------------------------------------------\n"); }
-
-  p = p->next;  }
-
- if (!found) {printf("No available rooms at the moment.\n");}
-} //end showAvailableOnly
+    if (!found) {
+        printf("No available rooms at the moment.\n");
+    }
+} // end showAvailableOnly
