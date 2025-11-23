@@ -160,5 +160,3 @@ void freeRooms(Room *head){
      free(tmp);  //free each node individually (should use method saveRooms before, to not lose Rooms data)
    }
 }//End freeRooms
-
-
