@@ -1,5 +1,5 @@
 #ifndef _ADMIN_H 
-#define __ADMIN_H 
+#define _ADMIN_H 
 #include "booking.h"
 
 //Function prototypes
@@ -14,5 +14,6 @@ void editRoom(Room *rooms, int roomID, float newPrice, int newCapacity);
 void viewAllAccounts(Account *accounts);
 // 
 void viewAllBookings(Booking *bookings, Account *accounts); 
+
 
 #endif
