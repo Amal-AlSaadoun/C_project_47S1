@@ -114,50 +114,38 @@ void editRoom(Room *rooms, int roomID, float newPrice, int newCapacity) {
 } //end editRoom
 //===============================================
 void viewAllAccounts(Account *accounts) {
-    Account *p = accounts;
+ Account *p = accounts;
  if (p == NULL) {
-        printf("No accounts found \n");
+  printf("No accounts found \n");
         return; }
- while (p != NULL) {
-   printf("\n-------------------------\n");
-        printf("Account ID : %d\n", p->accountID);
-        printf("Username   : %s\n", p->username);
-        printf("Age        : %d\n", p->age);
-        printf("Type       : %s\n", p->isAdmin ? "Admin" : "User");
-        printf("-------------------------\n");
 
-        p = p->next;    }
-} //end viewAllAccounts
+  printf("AccountID   Username        Age   Type\n");
+    while (p != NULL) {
+     printf("%-11d %-15s %-5d %s\n",p->accountID,p->username,p->age,p->isAdmin ? "Admin" : "User");
+        p = p->next; }
+} // end viewAllAccounts
 //===============================================
 void viewAllBookings(Booking *bookings, Account *accounts) {
-
-    Booking *bookingPtr = bookings;
-
-    if (bookingPtr== NULL) {
+ Booking *bookingPtr = bookings;
+ 
+ if (bookingPtr == NULL) {
         printf("No bookings found.\n");
-        return;
-    }
-
+        return;  }
+        
+ printf("BookingID   RoomID   Username        Nights   TotalCost\n");
     while (bookingPtr != NULL) {
 
-        char username[20] = "Unknown";
+      char username[20] = "Unknown";
 
-        Account *p = accounts;
+       Account *p = accounts;
         while (p != NULL) {
             if (p->accountID == bookingPtr->accountID) {
                 strcpy(username, p->username);
-                break;
-            }
+                break; }
             p = p->next;
         }
-        printf("\n----------------------------\n");
-        printf("Booking ID : %d\n", bookingPtr->bookingID);
-        printf("Room ID    : %d\n", bookingPtr->roomID);
-        printf("Username   : %s\n", username);
-        printf("Nights     : %d\n", bookingPtr->nights);
-        printf("TotalCost  : %.2f\n", bookingPtr->totalCost);
-        printf("----------------------------\n");
 
-        bookingPtr = bookingPtr->next;
+ printf("%-11d %-8d %-15s %-8d %.2f\n",bookingPtr->bookingID,bookingPtr->roomID,username,bookingPtr->nights,bookingPtr->totalCost);
+  bookingPtr = bookingPtr->next;
     }
-} //end viewAllBookings
+} // end viewAllBookings
