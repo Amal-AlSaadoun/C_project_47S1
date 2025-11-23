@@ -86,6 +86,7 @@ Account* registerAccount(Account *head, char *username, int age, char *password)
    newA->age = age;
    strcpy(newA->password, password);
    newA->isAdmin =0;
+   printf("Account registered successfully\n");
    //if the list is empty, this new account becomes the head
    if(head==NULL) return newA;
    curr= head;
