@@ -128,12 +128,12 @@ Booking* cancelBooking(Booking *head, int bookingID, Room *rooms) {
 void printUserBookings(Booking *head, int accountID) {
   Booking *p = head;
   int found = 0;
-  
-  printf("\nYour Bookings:\n");
-  printf("BookingID   RoomID   Nights   TotalCost\n");
+
   
   while (p != NULL) {
     if (p->accountID == accountID) {
+       printf("\nYour Bookings:\n");
+       printf("BookingID   RoomID   Nights   TotalCost\n");
        printf("%-11d %-8d %-8d %.2f\n",p->bookingID,p->roomID,p->nights,p->totalCost);
         found = 1; }
         p = p->next;
