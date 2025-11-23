@@ -7,7 +7,7 @@
 Account* loadAccounts(const char *filename){
    //-------------
    //open the file
-   FILE *fp=fopen(filename,"r+");
+   FILE *fp=fopen(filename,"r");
    //check
    if (fp == NULL) {
       printf("Sorry, Can't open accounts file\n");
@@ -86,6 +86,7 @@ Account* registerAccount(Account *head, char *username, int age, char *password)
    newA->age = age;
    strcpy(newA->password, password);
    newA->isAdmin =0;
+   newA->next = NULL; 
    printf("Account registered successfully\n");
    //if the list is empty, this new account becomes the head
    if(head==NULL) return newA;
