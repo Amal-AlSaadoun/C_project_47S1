@@ -70,14 +70,17 @@ Booking* createBooking(Booking *head, Room *rooms, int accountID, int roomID, in
 
    Booking *curr = head;
    Booking *last = NULL;
-   int count=0;
-   //count + track last node
+   //track last node
    while (curr != NULL) {
-      count++;            //count existing bookings
       last = curr;        //update last node
       curr = curr->next;  //move forward
    }
-   int newID=last->bookingID+1;
+   
+   int newID;
+   if (last == NULL)//first booking
+      newID = 1;              
+   else
+      newID=last->bookingID+1;
 
    //create new booking node
    Booking *newB = (Booking*) malloc(sizeof(Booking));
